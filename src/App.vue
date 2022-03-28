@@ -1,28 +1,48 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <HeaderSearch @categoryChange="onCurrentCategoryChange" />
+    <BodyChuck :joke="joke" />
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+  import HeaderSearch from './components/HeaderSearch.vue';
+  import BodyChuck from './components/BodyChuck.vue';
+  import axios from 'axios'
 
-export default {
-  name: 'App',
-  components: {
-    HelloWorld
+  export default {
+    name: 'App',
+
+    components: {
+      HeaderSearch,
+      BodyChuck,
+    },
+
+    data() {
+      return {
+        joke: null
+      }
+    },
+
+    methods: {
+      onCurrentCategoryChange(currentCategory) {
+        axios
+          .get(`https://api.chucknorris.io/jokes/random?category=${currentCategory}`)
+          .then(response => {
+            this.joke = response.data
+          })
+      }
+    }
   }
-}
 </script>
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+<style lang="sass">
+@import './assets/style/_variables.sass'
+
+#app
+  font-family: Avenir, Helvetica, Arial, sans-serif
+  -webkit-font-smoothing: antialiased
+  -moz-osx-font-smoothing: grayscale
+  text-align: center
+  color: #2c3e50
 </style>
